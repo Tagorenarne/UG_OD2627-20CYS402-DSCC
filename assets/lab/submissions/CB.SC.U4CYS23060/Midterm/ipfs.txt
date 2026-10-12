@@ -1,0 +1,57 @@
+Option A — Compose handles containers/network/volumes; you run setup commands once
+
+This is the simplest, most "assignment-friendly" version:
+
+yaml
+services:
+  node-a:
+    image: ipfs/kubo:latest
+    container_name: ipfs-node-a
+    networks:
+      - ipfs-net
+    volumes:
+      - ./ipfs-node-a/data:/data/ipfs
+    ports:
+      - "4001:4001"
+      - "5001:5001"
+      - "8080:8080"
+
+  node-b:
+    image: ipfs/kubo:latest
+    container_name: ipfs-node-b
+    networks:
+      - ipfs-net
+    volumes:
+      - ./ipfs-node-b/data:/data/ipfs
+    ports:
+      - "4002:4001"
+      - "5002:5001"
+      - "8081:8080"
+
+networks:
+  ipfs-net:
+
+Workflow:
+
+# Step 1 — key + folders
+echo -e "/key/swarm/psk/1.0.0/\n/base16/\n$(openssl rand -hex 32)" > swarm.key
+mkdir -p ipfs-node-a/data ipfs-node-b/data
+cp swarm.key ipfs-node-a/data/swarm.key
+cp swarm.key ipfs-node-b/data/swarm.key
+
+# Step 2 — start
+docker compose up -d
+docker compose ps          # confirm both are "Up"
+
+# Step 3 — peer setup
+docker exec ipfs-node-a ipfs bootstrap rm --all
+docker exec ipfs-node-b ipfs bootstrap rm --all
+
+PEER_ID=$(docker exec ipfs-node-a ipfs id -f "<id>")
+echo "Node A peer ID: $PEER_ID"
+
+docker exec ipfs-node-b ipfs bootstrap add /dns4/ipfs-node-a/tcp/4001/p2p/$PEER_ID
+docker exec ipfs-node-b ipfs swarm connect /dns4/ipfs-node-a/tcp/4001/p2p/$PEER_ID
+
+# Verify
+docker exec ipfs-node-b ipfs swarm peers
