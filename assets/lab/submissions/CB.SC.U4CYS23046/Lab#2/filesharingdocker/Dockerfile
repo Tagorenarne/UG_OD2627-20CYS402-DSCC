@@ -1,0 +1,20 @@
+FROM python:3.12-slim
+
+ENV APP_ENV=production \
+    APP_PORT=8000 \
+    UPLOAD_DIR=/app/uploads
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY server.py .
+COPY config.json .
+COPY README.md .
+COPY uploads ./uploads
+
+EXPOSE 8000
+
+CMD ["python", "server.py"]

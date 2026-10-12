@@ -1,0 +1,6 @@
+{
+    "application_name": "Internal File Sharing Service",
+    "version": "1.0",
+    "shared_folder": "uploads",
+    "author": "DevOps Team"
+}
