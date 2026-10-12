@@ -1,0 +1,2 @@
+Hello from inside my custom IPFS Docker container!
+This file was automatically added to the IPFS repository during startup.
