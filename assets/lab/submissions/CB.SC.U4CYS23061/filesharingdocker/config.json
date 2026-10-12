@@ -1,0 +1,4 @@
+{
+  "service_name": "internal-file-sharing",
+  "max_file_size_mb": 50
+}
