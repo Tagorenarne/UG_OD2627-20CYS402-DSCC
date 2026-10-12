@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    image: mt-webauth
+    container_name: mt-webauth-container
+    ports:
+      - "8080:80"
+    volumes:
+      - ./web:/var/www/html
+    restart: unless-stopped
