@@ -17,7 +17,7 @@ try:
     
     for i, heading in enumerate(headings, 1):
         title = heading.get_text(strip=True)
-        if title:  # Only print if the title isn't blank
+        if title:
             print(f"{i}. [{heading.name.upper()}] {title}")
 
 except Exception as e:
