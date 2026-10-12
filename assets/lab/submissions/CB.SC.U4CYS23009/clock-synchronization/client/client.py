@@ -1,55 +1,74 @@
-import os
+import socket
 import time
-from flask import Flask, jsonify, request
+import os
 
-app = Flask(__name__)
+MASTER_HOST = "clock-master"
+MASTER_PORT = 5000
 
 CLIENT_ID = os.getenv("CLIENT_ID", "client")
 CLOCK_OFFSET = float(os.getenv("CLOCK_OFFSET", "0"))
 
-def get_logical_time():
+def logical_time():
     return time.time() + CLOCK_OFFSET
 
 
-@app.route("/clock", methods=["GET"])
-def clock():
-    return jsonify({
-        "client_id": CLIENT_ID,
-        "clock": get_logical_time()
-    })
+print("========================================")
+print("       CRISTIAN'S CLOCK ALGORITHM")
+print("========================================")
 
+print(f"Client ID     : {CLIENT_ID}")
+print(f"Clock Offset  : {CLOCK_OFFSET} seconds")
 
-@app.route("/correct", methods=["POST"])
-def correct():
-    global CLOCK_OFFSET
+while True:
 
-    data = request.get_json()
-    correction = float(data["correction"])
+    try:
+        # T1
+        T1 = logical_time()
 
-    CLOCK_OFFSET += correction
+        # Connect to master
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client.connect((MASTER_HOST, MASTER_PORT))
 
-    return jsonify({
-        "client_id": CLIENT_ID,
-        "correction": correction,
-        "new_clock": get_logical_time()
-    })
+        # Send request
+        client.send(b"TIME_REQUEST")
 
+        # Receive master time
+        data = client.recv(1024)
 
-@app.route("/health", methods=["GET"])
-def health():
-    return jsonify({
-        "status": "OK",
-        "client_id": CLIENT_ID
-    })
+        # T2
+        T2 = logical_time()
 
+        master_time = float(data.decode())
 
-if __name__ == "__main__":
-    print("=" * 50)
-    print(f"{CLIENT_ID} started")
-    print(f"Initial clock offset: {CLOCK_OFFSET:+.2f} seconds")
-    print("=" * 50)
+        # Cristian's Algorithm
+        RTT = T2 - T1
+        estimated_delay = RTT / 2
 
-    app.run(
-        host="0.0.0.0",
-        port=5000
-    )
+        corrected_time = master_time + estimated_delay
+
+        current_time = logical_time()
+
+        error_before = abs(current_time - master_time)
+        error_after = abs(corrected_time - master_time)
+
+        print()
+        print("----------------------------------------")
+        print(f"Client ID       : {CLIENT_ID}")
+        print(f"Initial Clock   : {current_time:.6f}")
+        print(f"T1              : {T1:.6f}")
+        print(f"Master Time     : {master_time:.6f}")
+        print(f"T2              : {T2:.6f}")
+        print(f"RTT             : {RTT * 1000:.2f} ms")
+        print(f"Estimated Delay : {estimated_delay * 1000:.2f} ms")
+        print(f"Corrected Clock : {corrected_time:.6f}")
+        print(f"Error Before    : {error_before:.6f} sec")
+        print(f"Error After     : {error_after:.6f} sec")
+        print("----------------------------------------")
+
+        client.close()
+
+        time.sleep(5)
+
+    except Exception as e:
+        print("Waiting for master...")
+        time.sleep(2)
