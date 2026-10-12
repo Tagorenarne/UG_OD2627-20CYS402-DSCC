@@ -7,15 +7,13 @@ def start_client():
     cid = os.environ.get('CLIENT_ID', 'Unknown')
     offset_seconds = int(os.environ.get('CLOCK_OFFSET', 0))
     
-    # Extract client index number to stagger logs and prevent line scrambling
     try:
         client_idx = int(cid.split('-')[-1])
     except:
         client_idx = 1
 
-    time.sleep(3) # Wait for master to initialize
+    time.sleep(3) 
     
-    # Generate initial desynchronized clock
     logical_offset = datetime.timedelta(seconds=offset_seconds)
     initial_time = datetime.datetime.now() + logical_offset
     time_str = initial_time.strftime("%H:%M:%S.%f")
@@ -23,10 +21,8 @@ def start_client():
     s = socket.socket()
     s.connect(('berkeley-master', 5000))
     
-    # Send initial time to master
     s.send(f"{cid}|{time_str}".encode())
     
-    # Receive breakdown: MASTER_TIME|AVG_OFFSET|DIFF|CORRECTION
     data = s.recv(1024).decode()
     s.close()
     
@@ -35,10 +31,8 @@ def start_client():
     diff = float(diff_str)
     correction = float(correction_str)
     
-    # Calculate corrected clock
     corrected_time = initial_time + datetime.timedelta(seconds=correction)
     
-    # Build complete step-by-step log block
     output_block = (
         f"\n=======================================================\n"
         f"               BERKELEY SYNC: {cid}\n"
@@ -59,7 +53,6 @@ def start_client():
         f"=======================================================\n"
     )
     
-    # Stagger printing order: Client-1 prints first, then Client-2, etc.
     time.sleep(client_idx * 0.15)
     print(output_block, flush=True)
 
