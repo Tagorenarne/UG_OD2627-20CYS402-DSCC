@@ -7,7 +7,6 @@ services:
     networks:
       - clock-net
     environment:
-      # Change this value (e.g., to 100, 200, 500) for Experiments 2, 3, and 4
       - ARTIFICIAL_DELAY_MS=0 
 
   client1:
