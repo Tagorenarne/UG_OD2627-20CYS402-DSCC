@@ -8,20 +8,16 @@ class RaftNode:
         self.node_id = node_id
         self.cluster = cluster
 
-        # Initial Raft state
         self.state = "FOLLOWER"
         self.current_term = 0
         self.voted_for = None
 
-        # Log and committed state
         self.log = []
         self.commit_index = -1
         self.state_machine = []
 
-        # Leader information
         self.leader_id = None
 
-        # Random election timeout
         self.reset_election_timeout()
 
     def reset_election_timeout(self):
@@ -376,7 +372,6 @@ def main():
 
     cluster = []
 
-    # Create five Raft nodes
     for node_id in range(1, 6):
 
         node = RaftNode(
