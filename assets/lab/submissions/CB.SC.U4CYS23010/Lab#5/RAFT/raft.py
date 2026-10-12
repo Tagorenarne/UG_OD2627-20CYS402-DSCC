@@ -8,20 +8,16 @@ class RaftNode:
         self.node_id = node_id
         self.cluster = cluster
 
-        # Initial Raft state
         self.state = "FOLLOWER"
         self.current_term = 0
         self.voted_for = None
 
-        # Log and committed state
         self.log = []
         self.commit_index = -1
         self.state_machine = []
 
-        # Leader information
         self.leader_id = None
 
-        # Election timer
         self.reset_election_timeout()
 
     def reset_election_timeout(self):
@@ -347,7 +343,6 @@ def main():
 
     cluster = []
 
-    # Create five nodes
     for node_id in range(1, 6):
 
         node = RaftNode(
@@ -359,10 +354,8 @@ def main():
 
     print("\nFive Raft nodes created")
 
-    # Node 1 starts an election
     cluster[0].start_election()
 
-    # Find the elected leader
     leader = None
 
     for node in cluster:
@@ -373,7 +366,6 @@ def main():
 
             break
 
-    # Replicate client commands
     if leader is not None:
 
         leader.add_client_command(
@@ -386,7 +378,6 @@ def main():
 
         leader.send_heartbeats()
 
-    # Display final status
     print("\nFINAL CLUSTER STATUS")
 
     for node in cluster:
