@@ -17,8 +17,7 @@ def start_master():
     while True:
         conn, addr = s.accept()
         print(f"Received TIME_REQUEST from {addr}")
-        
-        # Introduce artificial delay for experiments
+
         if delay_ms > 0:
             time.sleep(delay_ms / 1000.0)
             
