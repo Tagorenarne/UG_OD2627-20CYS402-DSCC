@@ -14,7 +14,6 @@ def start_master():
     
     print(f"Master Time Daemon waiting for {num_clients} clients...\n")
     
-    # Collect reported times from all clients
     for _ in range(num_clients):
         conn, addr = s.accept()
         data = conn.recv(1024).decode()
@@ -26,22 +25,18 @@ def start_master():
     master_time_str = master_time.strftime("%H:%M:%S.%f")
     print(f"Master Baseline Time      : {master_time_str}")
     
-    # Calculate time differences relative to Master (Master diff = 0.0)
     diffs = [0.0]
     for conn, cid, ctime in connections:
         ctime = ctime.replace(year=master_time.year, month=master_time.month, day=master_time.day)
         diff = (ctime - master_time).total_seconds()
         diffs.append(diff)
         
-    # Calculate network average offset
     avg_offset = sum(diffs) / len(diffs)
     master_correction = avg_offset - 0.0
     
     print(f"Calculated Average Offset : {avg_offset:+.2f} sec")
     print(f"Master Correction Applied : {master_correction:+.2f} sec\n")
     
-    # Send complete step-by-step dataset to each client
-    # Protocol payload: MASTER_TIME|AVG_OFFSET|DIFF|CORRECTION
     for i, (conn, cid, ctime) in enumerate(connections):
         client_diff = diffs[i+1]
         correction = avg_offset - client_diff
