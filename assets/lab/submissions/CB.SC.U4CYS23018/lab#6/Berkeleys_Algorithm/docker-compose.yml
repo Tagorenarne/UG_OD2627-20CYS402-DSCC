@@ -1,7 +1,7 @@
 services:
 
   clock-master:
-    build: ./master
+    build: ./server
     container_name: clock-master
     networks:
       - clock-net
