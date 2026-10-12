@@ -1,0 +1,2 @@
+Hello from IPFS running inside Docker!
+This file was uploaded to demonstrate content-addressed storage.
