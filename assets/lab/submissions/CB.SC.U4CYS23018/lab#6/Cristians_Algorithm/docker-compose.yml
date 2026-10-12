@@ -1,0 +1,10 @@
+services:
+
+  server:
+    build: ./server
+
+  client:
+    build: ./client
+    
+    depends_on:
+      - server
