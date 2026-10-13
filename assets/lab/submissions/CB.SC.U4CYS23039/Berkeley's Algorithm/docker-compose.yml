@@ -1,0 +1,32 @@
+services:
+  master:
+    build: ./master
+    image: clock-master_berkeley
+    container_name: clock-master
+    environment: { CLOCK_OFFSET: 0, MAX_SKEW: 30, CLIENTS: "client1,client2,client3,client4" }
+    depends_on: [client1, client2, client3, client4]
+  client1:
+    build: ./client
+    image: clock-client_berkeley
+    container_name: clock-client1
+    environment: { CLIENT_ID: client1, CLOCK_OFFSET: -8 }
+  client2:
+    build: ./client
+    image: clock-client_berkeley
+    container_name: clock-client2
+    environment: { CLIENT_ID: client2, CLOCK_OFFSET: 6 }
+  client3:
+    build: ./client
+    image: clock-client_berkeley
+    container_name: clock-client3
+    environment: { CLIENT_ID: client3, CLOCK_OFFSET: -4 }
+  client4:
+    build: ./client
+    image: clock-client_berkeley
+    container_name: clock-client4
+    environment: { CLIENT_ID: client4, CLOCK_OFFSET: 10 }
+
+networks:
+  default:
+    name: clock-net
+    external: true
