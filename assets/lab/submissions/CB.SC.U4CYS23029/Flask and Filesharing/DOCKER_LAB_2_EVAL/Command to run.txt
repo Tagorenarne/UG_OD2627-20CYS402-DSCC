@@ -1,0 +1,1 @@
+docker run -d --name filesharing-test -p 8029:8000 filesharingdockerimage:latest

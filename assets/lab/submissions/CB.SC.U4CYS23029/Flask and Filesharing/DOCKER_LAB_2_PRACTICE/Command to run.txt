@@ -1,0 +1,1 @@
+docker run -d --name flaskapp-test -p 8029:5000 flaskappdockerimage:latest
