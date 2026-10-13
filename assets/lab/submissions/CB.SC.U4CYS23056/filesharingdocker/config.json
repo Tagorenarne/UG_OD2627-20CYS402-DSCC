@@ -1,0 +1,11 @@
+{
+    "application": "Internal File Sharing Service",
+    "version": "2.0",
+    "files": [
+        "/app/uploads/sample1.txt",
+        "/app/uploads/sample2.txt",
+        "/app/uploads/sample3.txt",
+        "/app/uploads/1.Biometric fundamentals and Standards.pdf",
+        "/app/uploads/download.jpg"
+    ]
+}

@@ -1,0 +1,7 @@
+Meeting Minutes
+
+Date: 02-07-2026
+Agenda:
+- Review Docker container
+- Verify uploaded files
+- Push image to DockerHub

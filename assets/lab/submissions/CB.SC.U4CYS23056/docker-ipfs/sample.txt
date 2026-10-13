@@ -1,0 +1,2 @@
+Hello IPFS from Docker
+first ipfs assignment

@@ -1,0 +1,5 @@
+Employee Handbook
+
+Welcome to the Internal File Sharing Service.
+
+This file is used for Docker testing.

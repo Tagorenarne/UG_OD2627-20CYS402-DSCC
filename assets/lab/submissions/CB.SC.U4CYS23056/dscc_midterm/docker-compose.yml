@@ -1,0 +1,9 @@
+services:
+  web:
+    image: mt-webauth
+    container_name: mt-webauth
+    build: .
+    ports:
+      - "8080:5000"
+    volumes:
+      - ./web:/midterm-exam
