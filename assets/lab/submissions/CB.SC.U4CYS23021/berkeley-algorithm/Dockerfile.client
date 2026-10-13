@@ -1,0 +1,8 @@
+FROM golang:1.26-alpine AS build
+WORKDIR /app
+COPY go.mod client.go ./
+RUN CGO_ENABLED=0 go build -o /time-client client.go
+
+FROM alpine:3.21
+COPY --from=build /time-client /time-client
+CMD ["/time-client", "-address", "server:8080", "-offset", "0s"]

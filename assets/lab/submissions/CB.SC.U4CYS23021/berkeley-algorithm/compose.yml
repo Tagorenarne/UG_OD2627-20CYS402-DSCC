@@ -1,0 +1,31 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    image: avalokita395/cs_ba_leader
+
+  client1:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    image: avalokita395/cs_ba_follower
+    depends_on:
+      - server
+    command: ["/time-client", "-address", "server:8080", "-offset", "15s"]
+
+  client2:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    depends_on:
+      - server
+    command: ["/time-client", "-address", "server:8080", "-offset", "-10s"]
+
+  client3:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    depends_on:
+      - server
+    command: ["/time-client", "-address", "server:8080", "-offset", "30s"]

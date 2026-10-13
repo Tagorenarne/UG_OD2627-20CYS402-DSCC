@@ -1,0 +1,36 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    ports:
+      - "8081:8080"
+    image: avalokita395/cs_ca_leader
+    command: ["/time-server", "-address", ":8080"]
+
+  client1:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    depends_on:
+      - server
+    image: avalokita395/cs_ca_follower
+    command: ["/time-client", "-address", "server:8080"]
+
+  client2:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    depends_on:
+      - server
+    image: avalokita395/cs_ca_follower
+    command: ["/time-client", "-address", "server:8080"]
+
+  client3:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    depends_on:
+      - server
+    image: avalokita395/cs_ca_follower
+    command: ["/time-client", "-address", "server:8080"]

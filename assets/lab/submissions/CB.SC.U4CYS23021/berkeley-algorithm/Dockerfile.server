@@ -1,0 +1,8 @@
+FROM golang:1.26-alpine AS build
+WORKDIR /app
+COPY go.mod server.go ./
+RUN CGO_ENABLED=0 go build -o /time-server server.go
+
+FROM alpine:3.21
+COPY --from=build /time-server /time-server
+CMD ["/time-server", "-address", ":8080", "-slaves", "3"]
