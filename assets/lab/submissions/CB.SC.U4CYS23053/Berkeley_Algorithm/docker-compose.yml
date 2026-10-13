@@ -1,0 +1,58 @@
+services:
+
+  clock-master:
+    image: Govardhan/berkeley_leader:1.0
+    container_name: clock-master
+    networks:
+      - clock-net
+    ports:
+      - "5000:5000"
+
+  clock-client1:
+    image: Govardhan/berkeley_follower:1.0
+    container_name: clock-client1
+    environment:
+      CLIENT_ID: client1
+      CLOCK_OFFSET: "-5"
+    networks:
+      - clock-net
+    depends_on:
+      - clock-master
+
+  clock-client2:
+    image: Govardhan/berkeley_follower:1.0
+    container_name: clock-client2
+    environment:
+      CLIENT_ID: client2
+      CLOCK_OFFSET: "5"
+    networks:
+      - clock-net
+    depends_on:
+      - clock-master
+
+  clock-client3:
+    image: Govardhan/berkeley_follower:1.0
+    container_name: clock-client3
+    environment:
+      CLIENT_ID: client3
+      CLOCK_OFFSET: "3"
+    networks:
+      - clock-net
+    depends_on:
+      - clock-master
+
+  clock-client4:
+    image: Govardhan/berkeley_follower:1.0
+    container_name: clock-client4
+    environment:
+      CLIENT_ID: client4
+      CLOCK_OFFSET: "1200"
+    networks:
+      - clock-net
+    depends_on:
+      - clock-master
+
+networks:
+  clock-net:
+    name: berkeley-clock-net
+    driver: bridge
