@@ -19,7 +19,10 @@ def get_time():
 def display_time(value):
     return datetime.fromtimestamp(value).strftime("%Y-%m-%d %H:%M:%S.%f")
 
+
+
 print("Cristian's Clock Synchronization")
+
 print("Server :", server_host, server_port)
 print("Initial Drift :", drift, "seconds")
 print("Rounds :", rounds)
@@ -116,14 +119,9 @@ for i in range(rounds):
         print("Correction      :", round(correction, 6), "seconds")
         print("Current Clock   :", display_time(get_time()))
 
-        print("-" * 50)
-        print()
-
     except Exception as error:
         print("Synchronization error:", error)
         print()
 
     if i < rounds:
         time.sleep(interval)
-
-
