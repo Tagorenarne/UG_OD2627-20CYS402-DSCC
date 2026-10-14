@@ -4,8 +4,8 @@ WORKDIR /app
 
 RUN pip install flask
 
-COPY server.py .
+COPY master.py .
 
 EXPOSE 5000
 
-CMD ["python", "server.py"]
+CMD ["python", "master.py"]
