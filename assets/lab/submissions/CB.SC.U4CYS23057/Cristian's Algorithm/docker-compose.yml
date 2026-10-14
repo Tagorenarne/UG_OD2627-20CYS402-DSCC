@@ -1,0 +1,8 @@
+services:
+  time-server:
+    build: ./server
+
+  time-client:
+    build: ./client
+    depends_on:
+      - time-server
