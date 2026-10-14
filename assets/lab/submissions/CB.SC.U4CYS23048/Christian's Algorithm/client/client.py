@@ -127,4 +127,3 @@ for i in range(rounds):
         time.sleep(interval)
 
 
-print("Cristian's Algorithm synchronization completed.")
