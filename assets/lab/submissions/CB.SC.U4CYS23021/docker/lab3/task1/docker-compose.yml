@@ -1,0 +1,11 @@
+services:
+    web:
+        image: avalokita395/portdockerimage:latest
+        ports:
+            - "8080:80"
+        volumes:
+            - ./website:/usr/share/nginx/html
+            - nginx_logs:/var/log/nginx
+
+volumes:
+    nginx_logs:

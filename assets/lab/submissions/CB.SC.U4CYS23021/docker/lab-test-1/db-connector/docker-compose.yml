@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:alpine
+    container_name: postgress
+    environment:
+      POSTGRES_USER: sanjai
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: dbdb
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    container_name: db-connector
+    environment:
+      host: db
+      port: 5432
+      username: sanjai
+      password: 123
+      name: dbdb
+      PYTHONUNBUFFERED: 1
+    depends_on:
+      - db

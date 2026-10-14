@@ -1,0 +1,37 @@
+# Five Raft nodes. To resize the cluster, add/remove a service block and
+# update PEERS. Source is mounted, so editing raft.py needs only a restart.
+x-env: &env
+  PEERS: node1,node2,node3,node4,node5
+  PORT: "8000"
+  HEARTBEAT_MS: "150"
+  ELECTION_MS: "800,1600"
+  RPC_TIMEOUT_MS: "300"
+
+x-node: &node
+  build: .
+  image: raft-py
+  volumes:
+    - ./raft.py:/app/raft.py:ro
+  stop_grace_period: 1s
+
+services:
+  node1:
+    <<: *node
+    environment: {<<: *env, NODE_ID: node1}
+    ports: ["8001:8000"]
+  node2:
+    <<: *node
+    environment: {<<: *env, NODE_ID: node2}
+    ports: ["8002:8000"]
+  node3:
+    <<: *node
+    environment: {<<: *env, NODE_ID: node3}
+    ports: ["8003:8000"]
+  node4:
+    <<: *node
+    environment: {<<: *env, NODE_ID: node4}
+    ports: ["8004:8000"]
+  node5:
+    <<: *node
+    environment: {<<: *env, NODE_ID: node5}
+    ports: ["8005:8000"]

@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: midterm_db
+      POSTGRES_USER: midterm_user
+      POSTGRES_PASSWORD: midterm_pass
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+
+  web:
+    build: .
+    image: mt-webauth
+    environment:
+      host: db
+      username: midterm_user
+      password: midterm_pass
+      dbname: midterm_db
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./web:/midterm-exam
+    depends_on:
+      - db
